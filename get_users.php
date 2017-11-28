@@ -7,18 +7,19 @@ $db = new DB_CONNECT();
 	mysql_query("SET NAMES utf8");
 
 
-	$result=mysql_query("SELECT prod_title , prod_id FROM `product`");
+	$result=mysql_query("SELECT * FROM `users`");
 	if(mysql_num_rows($result) > 0 ){
 
-		$response["products"]=array();
+		$response["users"]=array();
 
 		while($row = mysql_fetch_array($result)){
-			$invoice = array();
-			$invoice["title"]=$row["prod_title"];
-			$invoice["id"]=$row["prod_id"];
+			$user = array();
+
+			$user["name"] = $row["name"];
+      $user["id"  ] = $row["id"  ];
 
 
-			array_push($response["products"], $invoice);
+			array_push($response["users"], $user);
 		}
 
 		$response['value']=1;
