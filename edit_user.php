@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/db_connect.php';
+
 $response = array();
 
 if(isset($_POST['id'])){
@@ -11,14 +11,25 @@ if(isset($_POST['id'])){
 	$mobile   = $_POST['mobile'  ] ;
 	$password = $_POST['password'] ;
 
-	$db = new DB_CONNECT();
+	
+      
+ require_once __DIR__ . '/db_config.php';
+
+        // Create connection
+        $conn = new mysqli(DB_SERVER, DB_USER,DB_PASSWORD ,DB_DATABASE);
+
+       // Check connection
+       if ($conn->connect_error) {
+           die("Connection failed: " . $conn->connect_error);
+       } 
+
   $query =   "UPDATE users
     SET name='$name', email='$email', mobile='$mobile' , password='$password'
     WHERE id='$id' " ;
 
-  mysql_query("SET NAMES utf8");
+  mysqli_query($conn , "SET NAMES utf8");
 
-	$result = mysql_query($query);
+	$result = mysqli_query($conn , $query);
 
 
   if($result){

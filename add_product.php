@@ -1,7 +1,6 @@
 <?php
 
 
-require_once __DIR__ . '/db_connect.php';
 $response = array();
 
 if(isset($_POST['price'])){
@@ -12,19 +11,29 @@ if(isset($_POST['price'])){
 	$title  = $_POST['title' ] ;
 
 
-	$db = new DB_CONNECT();
 
+     require_once __DIR__ . '/db_config.php';
 
-	mysql_query("SET NAMES utf8");
-	$result=mysql_query("INSERT INTO product(`prod_title`,`prod_price`,`prod_stock`,`prod_type`)
+        // Create connection
+        $conn = new mysqli(DB_SERVER, DB_USER,DB_PASSWORD ,DB_DATABASE);
+
+       // Check connection
+       if ($conn->connect_error) {
+           die("Connection failed: " . $conn->connect_error);
+       }
+
+	mysqli_query($conn ,"SET NAMES utf8");
+	$result=mysqli_query($conn ,"INSERT INTO product(`prod_title`,`prod_price`,`prod_stock`,`prod_type`)
 																					   VALUES ( '$title','$price','$stock','$type')");
+
+
 	if($result){
 		$response['value']=1;
 
 	}else{
 		$response['value']=0;
 
-		echo mysql_error();
+		echo mysqli_error($conn);
 	}
 }else{
 	$response['value']=-1;

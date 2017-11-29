@@ -3,19 +3,28 @@
 
 
 if(isset($_POST["id"])){
-	require_once __DIR__ . '/db_connect.php';
+	 
 	$response = array();
-	$db = new DB_CONNECT();
+	
+      
+ require_once __DIR__ . '/db_config.php';
 
-		mysql_query("SET NAMES utf8");
+        // Create connection
+        $conn = new mysqli(DB_SERVER, DB_USER,DB_PASSWORD ,DB_DATABASE);
+
+       // Check connection
+       if ($conn->connect_error) {
+           die("Connection failed: " . $conn->connect_error);
+       } 
+		mysqli_query($conn , "SET NAMES utf8");
     $id = $_POST["id"] ;
 
-		$result=mysql_query("SELECT * FROM `product` WHERE prod_id = $id");
+		$result=mysqli_query($conn , "SELECT * FROM `product` WHERE prod_id = $id");
 
-		if(mysql_num_rows($result) > 0 ){
+		if(mysqli_num_rows($result) > 0 ){
 
 			$response["products"]=array();
-			while($row = mysql_fetch_array($result)){
+			while($row = mysqli_fetch_array($result)){
 
 				$product = array();
 

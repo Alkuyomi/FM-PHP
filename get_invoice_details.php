@@ -3,20 +3,29 @@
 
 
 if(isset($_POST["id"])){
-	require_once __DIR__ . '/db_connect.php';
+	
 	$response = array();
-	$db = new DB_CONNECT();
+	
+      
+ require_once __DIR__ . '/db_config.php';
 
-		mysql_query("SET NAMES utf8");
-    $id = $_POST["id"] ;
+        // Create connection
+        $conn = new mysqli(DB_SERVER, DB_USER,DB_PASSWORD ,DB_DATABASE);
 
-		$result=mysql_query("SELECT * FROM `invoice` WHERE invoice_id = $id");
+       // Check connection
+       if ($conn->connect_error) {
+           die("Connection failed: " . $conn->connect_error);
+       } 
+		mysqli_query($conn , "SET NAMES utf8");
+      $id = $_POST["id"] ;
 
-		if(mysql_num_rows($result) > 0 ){
+		$result=mysqli_query($conn , "SELECT * FROM `invoice` WHERE invoice_id = $id");
+
+		if(mysqli_num_rows($result) > 0 ){
 
 			$response["invoices"]=array();
 
-			while($row = mysql_fetch_array($result)){
+			while($row = mysqli_fetch_array($result)){
 
 				$invoice = array();
 

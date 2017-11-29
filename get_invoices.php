@@ -2,21 +2,30 @@
 
 require_once __DIR__ . '/db_connect.php';
 $response = array();
-$db = new DB_CONNECT();
 
-	mysql_query("SET NAMES utf8");
+      
+ require_once __DIR__ . '/db_config.php';
+
+        // Create connection
+        $conn = new mysqli(DB_SERVER, DB_USER,DB_PASSWORD ,DB_DATABASE);
+
+       // Check connection
+       if ($conn->connect_error) {
+           die("Connection failed: " . $conn->connect_error);
+       } 
+	mysqli_query($conn , "SET NAMES utf8");
 
 
-	$result=mysql_query("SELECT invoice_id , invoice_name FROM `invoice`");
-	if(mysql_num_rows($result) > 0 ){
+	$result=mysqli_query($conn , "SELECT invoice_id , invoice_name FROM `invoice`");
+	if(mysqli_num_rows($result) > 0 ){
 
 		$response["invoices"]=array();
 
-		while($row = mysql_fetch_array($result)){
+		while($row = mysqli_fetch_array($result)){
 			$invoice = array();
 
 			$invoice["name"] = $row["invoice_name"];
-      $invoice["id"  ] = $row["invoice_id"  ];
+            $invoice["id"  ] = $row["invoice_id"  ];
 
 
 			array_push($response["invoices"], $invoice);

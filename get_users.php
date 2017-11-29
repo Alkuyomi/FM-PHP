@@ -1,18 +1,28 @@
 <?php
 
-require_once __DIR__ . '/db_connect.php';
+
 $response = array();
-$db = new DB_CONNECT();
-
-	mysql_query("SET NAMES utf8");
 
 
-	$result=mysql_query("SELECT * FROM `users`");
-	if(mysql_num_rows($result) > 0 ){
+ require_once __DIR__ . '/db_config.php';
+
+        // Create connection
+        $conn = new mysqli(DB_SERVER, DB_USER,DB_PASSWORD ,DB_DATABASE);
+
+       // Check connection
+       if ($conn->connect_error) {
+           die("Connection failed: " . $conn->connect_error);
+       }
+
+	mysqli_query($conn ,"SET NAMES utf8");
+
+
+	$result=mysqli_query($conn , "SELECT * FROM `users`");
+	if(mysqli_num_rows($result) > 0 ){
 
 		$response["users"]=array();
 
-		while($row = mysql_fetch_array($result)){
+		while($row = mysqli_fetch_array($result)){
 			$user = array();
 
 			$user["name"] = $row["name"];

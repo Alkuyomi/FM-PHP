@@ -3,6 +3,12 @@
 
 $response = array();
 
+if(isset($_POST['id'])){
+
+  $id = $_POST['id'] ;
+
+
+
 
  require_once __DIR__ . '/db_config.php';
 
@@ -13,29 +19,26 @@ $response = array();
        if ($conn->connect_error) {
            die("Connection failed: " . $conn->connect_error);
        }
-	mysqli_query($conn , "SET NAMES utf8");
+
+  $query =   "delete from users
+where id = '$id'
+limit 1" ;
+
+  mysqli_query($conn , "SET NAMES utf8");
+
+	$result = mysqli_query($conn , $query);
 
 
-	$result=mysqli_query($conn ,"SELECT prod_title , prod_id FROM `product`");
-	if(mysqli_num_rows($result) > 0 ){
-
-		$response["products"]=array();
-
-		while($row = mysqli_fetch_array($result)){
-			$invoice = array();
-			$invoice["title"]=$row["prod_title"];
-			$invoice["id"]=$row["prod_id"];
-
-
-			array_push($response["products"], $invoice);
-		}
-
+  if($result){
 		$response['value']=1;
 
 	}else{
 		$response['value']=0;
 	}
+}else{
+	$response['value']=-1;
 
+}
 echo json_encode($response);
 
 ?>

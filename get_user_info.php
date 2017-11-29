@@ -3,20 +3,26 @@
 
 
 if(isset($_POST["id"])){
-	require_once __DIR__ . '/db_connect.php';
-	$response = array();
-	$db = new DB_CONNECT();
 
-		mysql_query("SET NAMES utf8");
+	$response = array();
+	require_once __DIR__ . '/db_config.php';
+
+         // Create connection
+         $conn = new mysqli(DB_SERVER, DB_USER,DB_PASSWORD ,DB_DATABASE);
+
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
     $id = $_POST["id"] ;
 
-		$result=mysql_query("SELECT * FROM `users` WHERE id = $id");
+		$result=mysqli_query($conn ,"SELECT * FROM `users` WHERE id = $id");
 
-		if(mysql_num_rows($result) > 0 ){
+		if(mysqli_num_rows($result) > 0 ){
 
 			$response["users"]=array();
 
-			while($row = mysql_fetch_array($result)){
+			while($row = mysqli_fetch_array($result)){
 
 				$user = array();
 

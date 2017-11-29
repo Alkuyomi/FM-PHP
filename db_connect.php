@@ -14,13 +14,22 @@ class DB_CONNECT{
     function connect() {
         require_once __DIR__ . '/db_config.php';
 
-        $con = mysql_connect(DB_SERVER, DB_USER, DB_PASSWORD) ;
-        $db = mysql_select_db(DB_DATABASE);
-        return $con;
+  
+
+        // Create connection
+        $conn = new mysqli(DB_SERVER, DB_USER, DB_PASSWORD , DB_DATABASE);
+
+       // Check connection
+       if ($conn->connect_error) {
+           die("Connection failed: " . $conn->connect_error);
+       } 
+  
+        
+        return $conn;
     }
 
     function close() {
-        mysql_close();
+        mysqli_close();
     }
 }
 
